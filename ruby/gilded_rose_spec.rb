@@ -95,7 +95,7 @@ RSpec.describe GildedRose do
 
   context "Sulfuras" do 
     it "no update to sell and quality" do
-      item=Item.new("Sulfuras", 5, 80)
+      item=Item.new("Sulfuras, Hand of Ragnaros", 5, 80)
       gilded_rose = GildedRose.new([item])
       gilded_rose.update_quality
       expect(item).to have_attributes(sell_in: 5, quality: 80)
