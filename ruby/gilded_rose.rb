@@ -11,37 +11,29 @@ class GildedRose
   end
 
   def update_item(item)
-    return if item.name == "Sulfuras, Hand of Ragnaros"
-    if item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert"  
-      change_quality(item, "decrease")  if item.name.split(" ")[0] == "Conjured"
-      change_quality(item, "decrease")
-    else
-      change_quality(item, "increase")
-      if item.name == "Backstage passes to a TAFKAL80ETC concert"
-        change_quality(item, "increase") if item.sell_in < 11
-        change_quality(item, "increase") if item.sell_in < 6
-      end
-    end
+    return if item.name=="Sulfuras, Hand of Ragnaros"
     item.sell_in -= 1
-    if item.sell_in < 0
-      if item.name == "Aged Brie"
-        change_quality(item, "increase")
-      else 
-        change_quality(item, "decrease")
-        change_quality(item, "decrease") if item.name.split(" ")[0] == "Conjured"
-        item.quality = 0 if item.name == "Backstage passes to a TAFKAL80ETC concert"
-      end 
+    case item.name
+    when "Aged Brie"
+      return if item.quality ==50
+      item.quality +=1
+      item.quality +=1 if item.sell_in <=0 && item.quality <50
+    when "Backstage passes to a TAFKAL80ETC concert"
+      return if item.quality ==50
+      return item.quality = 0 if item.sell_in <0
+      item.quality +=1
+      item.quality +=1 if item.sell_in < 10
+      item.quality +=1 if item.sell_in < 5
+    when "Conjured Mana Cake"
+      item.quality -= 2
+      item.quality -= 2 if item.sell_in <=0
+      return item.quality=0 if item.quality<=0
+    else #normal
+      return if item.quality ==0
+      item.quality -=1
+      item.quality -=1 if item.sell_in <=0
     end
   end
-
-  def change_quality(item, direction)
-    if direction == "increase"
-      item.quality +=1 if item.quality < 50
-    else 
-      item.quality -=1 if item.quality >0
-    end
-  end
-
 end
 
 class Item
